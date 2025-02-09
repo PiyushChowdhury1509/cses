@@ -48,17 +48,34 @@ ll mod_exp(ll a, ll b, ll m = MOD) {
     return res;
 }
 
-int f(int n,vector<int>&dp){
+int td(int n,vector<int>&dp){
     if(n==0) return 0;
     if(dp[n]!=-1) return dp[n];
     int num=n;
     int ans=INT_MAX;
     while(num>0){
         int dig=num%10;
-        if(dig>0) ans=min(ans,f(n-dig,dp)+1);
+        if(dig>0) ans=min(ans,td(n-dig,dp)+1);
         num/=10;
     }
     return dp[n]=ans;
+}
+
+int bu(int n,vector<int>&dp2){
+    dp2[0]=0;
+        for(int i=1;i<=9;i++){
+            dp2[i]=1;
+        }
+        for(int i=10;i<=n;i++){
+            int num=i;
+            while(num>0){
+                int dig=num%10;
+                if(dig!=0) dp2[i]=min(dp2[i],1+dp2[i-dig]);
+                num/=10;
+            }
+        }
+        int ans=dp2[n];
+        return ans;
 }
 
 int main() {
@@ -69,7 +86,8 @@ int main() {
         int n;
         cin>>n;
         vector<int>dp(n+5,-1);
-        int ans=f(n,dp);
+        vector<int>dp2(n+5,INT_MAX);
+        int ans=bu(n,dp2);
         cout<<ans;
     }
 
